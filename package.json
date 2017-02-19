@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/ArronJLinton/amazon-storefront#readme",
   "dependencies": {
+    "inquirer": "^3.0.1",
     "mysql": "^2.13.0"
   }
 }

@@ -12,3 +12,27 @@ CREATE TABLE departments (
 
 -- Insert a set of records.
 
+
+-- The products table should have each of the following columns:
+
+-- id (unique, auto incrementing primary key not null)
+
+-- product_name (Name of product)
+
+-- department_id (foreign id)
+
+-- price (cost to customer)
+
+-- stock_quantity (how much of the product is available in stores)
+
+-- Then create a Table inside of that database called sales.
+
+-- The sales table should have each of the following columns:
+
+-- id (unique, auto incrementing primary key not null)
+
+-- product_id (foreign id)
+
+-- quantity_purchased
+
+-- created_at (timestamp)
