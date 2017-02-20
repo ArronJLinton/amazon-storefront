@@ -20,46 +20,64 @@ var connection = mysql.createConnection({
   database : 'bamazon_db',
 });
 
-connection.connect();
+// Initiate MySQL Connection.
+connection.connect(function(err) {
+  if (err) {
+    console.error("error connecting: " + err.stack);
+    return;
+  }
+  // console.log("connected as id " + connection.threadId);
+});
 
-
-// function selectTable(table){
-// 	connection.query('SELECT * from ' + table, function (error, results, fields) {
-// 	  if (error) throw error;
-// 	  console.log(results);
-// 	});
-// }
-
-connection.query('SELECT * from products', function (error, results, fields)
+connection.query('SELECT * from products', function (error, results)
 {
-	// console.log(results);
-	console.log('\n');
-
+	console.log("WELCOME TO BAMAZON!")
+	// Displays products table
+	for(var i=0; i < results.length; i++){
+	console.log("Product ID: " + results[i].id);
+	console.log("Product Name: "  + results[i].product_name);
+	}
 	inquirer.prompt([
 	{type: "input",
 	  name: "product_id",
-	  message: "What is the ID of the product you would like to buy?"}
+	  message: "What is the ID of the product you would like to buy?"},
+	  {type: "input",
+	  name: "quantity",
+	  message: "How many units?"}
 	]).then(function(data){
 		var product = data.product_id;
-		console.log(product);
+		var quantity = data.quantity
 
-		// connection.query('SELECT * from beers', function (error, results, fields) {
-		// 	console.log(results);
-		// 	console.log('\n');
-		// 	inquirer.prompt([
-		// 	{type: "input",
-		// 	  name: "beer_id",
-		// 	  message: "Put the id of the beer that you want."}
-		// 	]).then(function(data){
-		// 		//do an insert into mysql 
-		// 		connection.query('INSERT into dranken_beers SET ?', {
-		// 			beer_id : data.beer_id,
-		// 			dranker_id : dranker
-		// 		}, function (error, results, fields) {
-		// 			console.log('insert complete')
-		// 		});
-		// 	});
-		// });
+		connection.query('SELECT * from products where id = ?', product, function (err, result){
+			var stock = result[0].stock_quantity;
+			var newStock = (stock - quantity);
+			var totalCost = (quantity * result[0].price)
+
+			// console.log(result[0].product_name);
+
+		// This condition checks whether or not the stock_quantity can meet quantity requested
+			if(quantity <= stock){
+				console.log("Yes We Have Enough!")
+
+			// Updates database to reflect the remaining quantity 
+				connection.query('UPDATE products SET stock_quantity=? where id=?', [newStock, product], function (err, result){
+					console.log('Update Complete')
+					console.log('Total Cost: $'+totalCost);
+				})
+				// Adds record into sales table
+				connection.query('INSERT INTO sales SET ?', {
+					product_id : product,
+					quantity_purchased : quantity
+				}, function(error, result){
+					console.log('Transaction Complete!')
+				})
+
+			}else{
+				console.log("Insufficent Quantity!")
+			}
+
+		});
 
 	});
+
 });
