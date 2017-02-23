@@ -34,16 +34,17 @@ connection.query('SELECT * from products', function (error, results)
 {
 	console.log("WELCOME TO BAMAZON!")
 	// Displays products table
-	for(var i=0; i < results.length; i++){
-		console.table([
-			{
-				Product_ID : results[i].id,
-				Product_Name : results[i].product_name
-			}
-		]);
-	// console.log("Product ID: " + results[i].id);
-	// console.log("Product Name: "  + results[i].product_name);
-	}
+	console.table(results);
+	// for(var i=0; i < results.length; i++){
+	// 	console.table([
+	// 		{
+	// 			Product_ID : results[i].id,
+	// 			Product_Name : results[i].product_name
+	// 		}
+	// 	]);
+	// // console.log("Product ID: " + results[i].id);
+	// // console.log("Product Name: "  + results[i].product_name);
+	// }
 	inquirer.prompt([
 	{type: "input",
 	  name: "product_id",

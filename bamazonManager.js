@@ -38,23 +38,27 @@ inquirer.prompt([
 
 			connection.query('SELECT * from products', function (error, results)
 				{
-					for(var i=0; i<results.length; i++){
-						console.table([
-							{Product_ID : results[i].id,
-								Product_Name : results[i].product_name,
-								Price : results[i].price,
-								Inventory : results[i].stock_quantity
-						}
-					])
-				}managerView();
+					console.table(results);
+				// 	for(var i=0; i<results.length; i++){
+				// 		console.table([
+				// 			{Product_ID : results[i].id,
+				// 				Product_Name : results[i].product_name,
+				// 				Price : results[i].price,
+				// 				Inventory : results[i].stock_quantity
+				// 		}
+				// 	])
+				// }
+				managerView();
 			})
 
 		// This condition list all products with quantities less than 5 
 		}else if(data.managerChoice == 2){
 			connection.query('SELECT * from products', function (error, results)
 				{
+
 					for(var i=0; i<results.length; i++){
 						if(results[i].stock_quantity <= 5){
+							// console.table(results);
 						console.table([
 							{Product_ID : results[i].id,
 								Product_Name : results[i].product_name,
@@ -63,7 +67,8 @@ inquirer.prompt([
 							}
 						])
 					}
-				}managerView();
+				}
+				managerView();
 			})
 			// else{
 			// 			console.log("Inventory Up to Date");

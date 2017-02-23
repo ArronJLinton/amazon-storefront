@@ -34,18 +34,19 @@ function supervisorView(){
 
           connection.query('SELECT d.id, d.department_name, d.over_head_costs, SUM(s.quantity_purchased * p.price) AS Product_Sales, SUM(d.over_head_costs - (s.quantity_purchased * p.price)) AS Total_Profit FROM departments d left join products p on d.id = p.department_id left join sales s on s.product_id = p.id GROUP BY d.id;', function (error, results){
               // console.table(results)
-
-              for(var i=0; i < results.length; i++){
-                console.table([
-                  {
-                    DepartmentId : results[i].id,
-                    Department_Name : results[i].department_name,
-                    Over_Head_Costs : results[i].over_head_costs,
-                    Product_Sales : "$" + results[i].Product_Sales,
-                    Total_Profit : "$" + results[i].Total_Profit
-                }
-              ]);
-            }
+              console.table(results)
+            //   for(var i=0; i < results.length; i++){
+            //     console.table([
+            //       {
+            //         DepartmentId : results[i].id,
+            //         Department_Name : results[i].department_name,
+            //         Over_Head_Costs : results[i].over_head_costs,
+            //         Product_Sales : "$" + results[i].Product_Sales,
+            //         Total_Profit : "$" + results[i].Total_Profit
+            //     }
+            //   ]);
+            // }
+            supervisorView()
           })
         }else if(data.supervisorChoice == 2){
          inquirer.prompt([
