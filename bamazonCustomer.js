@@ -12,6 +12,7 @@ step 8 if it breaks change it until it works
 
 var inquirer = require("inquirer");
 var mysql = require("mysql");
+require("console.table");
 
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -34,8 +35,14 @@ connection.query('SELECT * from products', function (error, results)
 	console.log("WELCOME TO BAMAZON!")
 	// Displays products table
 	for(var i=0; i < results.length; i++){
-	console.log("Product ID: " + results[i].id);
-	console.log("Product Name: "  + results[i].product_name);
+		console.table([
+			{
+				Product_ID : results[i].id,
+				Product_Name : results[i].product_name
+			}
+		]);
+	// console.log("Product ID: " + results[i].id);
+	// console.log("Product Name: "  + results[i].product_name);
 	}
 	inquirer.prompt([
 	{type: "input",

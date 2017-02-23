@@ -1,5 +1,6 @@
 var inquirer = require("inquirer");
 var mysql = require("mysql");
+require("console.table");
 
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -29,7 +30,7 @@ console.log("4) Add New Product")
 inquirer.prompt([
 	{type: "input",
 	  name: "managerChoice",
-	  message: "What would you like to do (select number from list above)?"},
+	  message: "What would you like to do (select number from list above)?"}
 	]).then(function(data){
 
 		// This condition lists all products for sale
@@ -38,10 +39,13 @@ inquirer.prompt([
 			connection.query('SELECT * from products', function (error, results)
 				{
 					for(var i=0; i<results.length; i++){
-						console.log("Product ID: " + results[i].id);
-						console.log("Product Name: "  + results[i].product_name);
-						console.log("Price: $"  + results[i].price);
-						console.log("Quantity Remaining: "  + results[i].stock_quantity);
+						console.table([
+							{Product_ID : results[i].id,
+								Product_Name : results[i].product_name,
+								Price : results[i].price,
+								Inventory : results[i].stock_quantity
+						}
+					])
 				}managerView();
 			})
 
@@ -51,15 +55,20 @@ inquirer.prompt([
 				{
 					for(var i=0; i<results.length; i++){
 						if(results[i].stock_quantity <= 5){
-						console.log("Product ID: " + results[i].id);
-						console.log("Product Name: "  + results[i].product_name);
-						console.log("Price: $"  + results[i].price);
-						console.log("Quantity Remaining: "  + results[i].stock_quantity);
+						console.table([
+							{Product_ID : results[i].id,
+								Product_Name : results[i].product_name,
+								Price : results[i].price,
+								Inventory : results[i].stock_quantity
+							}
+						])
 					}
-				}else{
-						console.log("Inventory Up to Date");
-				}managerView()
+				}managerView();
 			})
+			// else{
+			// 			console.log("Inventory Up to Date");
+			// 			managerView()
+			// 	}
 
 		// This condition allows manager to add to inventory
 		}else if(data.managerChoice == 3){
